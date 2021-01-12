@@ -15,6 +15,7 @@ from google.auth.transport.requests import Request
 # SCOPES は readonly (読み込み許可) 意外にも modify (更新) や send (送信) など、様々なオプションがあります。
 SCOPES = ['https://www.googleapis.com/auth/gmail.readonly']
 
+
 # Gmail API で認証する
 def gmail_authorize():
     """Shows how to authorize Gmail API.
@@ -44,6 +45,7 @@ def gmail_authorize():
             pickle.dump(creds, token)
     return creds
 
+
 def main():
     """Shows the basic usage of Gmail API.
     1. Authorize Gmail API.
@@ -52,6 +54,7 @@ def main():
     service = build('gmail', 'v1', credentials=creds)
     print(creds)
     print(service)
+
 
 if __name__ == '__main__':
     main()

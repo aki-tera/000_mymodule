@@ -26,7 +26,8 @@ def authorize(SCOPES, token_file, credentials_file):
         if creds and creds.expired and creds.refresh_token:
             creds.refresh(Request())
         else:
-            flow = InstalledAppFlow.from_client_secrets_file(credentials_file, SCOPES)
+            flow = InstalledAppFlow.from_client_secrets_file(
+                credentials_file, SCOPES)
             creds = flow.run_local_server(port=0)
 
         # Save the credentials for the next run
@@ -44,9 +45,9 @@ def build_service(creds):
 def get_messages(service, userid="me", query="", maxResults=100):
     """Get messages list."""
     msgs_list = service.users().messages().list(
-    userId=userid,
-    q=query,
-    maxResults=maxResults,
+        userId=userid,
+        q=query,
+        maxResults=maxResults,
     ).execute().get('messages')
     return msgs_list
 
@@ -54,10 +55,11 @@ def get_messages(service, userid="me", query="", maxResults=100):
 def get_message(service, message, userid="me"):
     """Get a message."""
     msg = service.users().messages().get(
-    userId=userid,
-    id=message['id']
+        userId=userid,
+        id=message['id']
     ).execute()
     return msg
+
 
 def get_message_from(message):
     """Get sender of message"""
@@ -68,6 +70,7 @@ def get_message_from(message):
             return msg_from
     print("Not found subject")
     return None
+
 
 def get_message_subject(message):
     """Get message subject."""
@@ -79,27 +82,19 @@ def get_message_subject(message):
     print("Not found subject")
     return None
 
-def get_message_from(message):
-    """Get sender of message"""
-    headers = get_message_headers(message)
-    for header in headers:
-        if header["name"] == "From":
-            msg_from = header["value"]
-            return msg_from
-    print("Not found subject")
-    return None
 
 def get_message_body(message):
     """Get message body."""
     part = get_message_part(message)
     try:
         body = part["body"]["data"]
-    #except TypeError:
+    # except TypeError:
     except KeyError:
         # 通常はpart["body"]["data"]で読めるが、読めない場合は下記とする
         body = part["parts"][0]["parts"][0]["parts"][1]["body"]["data"]
     finally:
         return body
+
 
 def get_message_part(message):
     """Get message part."""
@@ -122,8 +117,8 @@ def decode(encoded):
 def get_threads(service, userid="me", query=""):
     """Get messages list."""
     threads_list = service.users().threads().list(
-    userId=userid,
-    q=query
+        userId=userid,
+        q=query
     ).execute().get('threads')
     return threads_list
 
@@ -131,8 +126,8 @@ def get_threads(service, userid="me", query=""):
 def get_thread(service, thread, userid="me"):
     """Get a message."""
     thread = service.users().threads().get(
-    userId=userid,
-    id=thread['id']
+        userId=userid,
+        id=thread['id']
     ).execute()
     return thread
 
@@ -141,9 +136,9 @@ def remove_label_from_message(service, labelslist, message, userid="me"):
     """Remove label from message"""
     labels = {"removeLabelIds": labelslist}
     service.users().messages().modify(
-    userId=userid,
-    id=message["id"],
-    body=labels,
+        userId=userid,
+        id=message["id"],
+        body=labels,
     ).execute()
 
 
@@ -154,6 +149,6 @@ def send_message(service, To, From, subject, body, user_id="me"):
     send_message["from"] = From
     send_message["subject"] = subject
     service.users().messages().send(
-    userId=user_id,
-    body={"raw": base64.urlsafe_b64encode(send_message.as_bytes()).decode()}
-    ).execute()
+        userId=user_id, body={
+            "raw": base64.urlsafe_b64encode(
+                send_message.as_bytes()).decode()}).execute()
