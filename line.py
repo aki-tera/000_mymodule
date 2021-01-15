@@ -28,8 +28,8 @@ def post_line(creds, send_message):
 def authorize_line(token_file):
     """Authorize LINE notify"""
     creds = None
-    if os.path.exists(token_file):
-        with open("line_token.txt", 'rb') as token:
-            creds = pickle.load(token)
+    with open(token_file, encoding='utf-8') as token:
+        #改行を取り除く
+        creds = token.read().rstrip("\n")
 
     return creds
