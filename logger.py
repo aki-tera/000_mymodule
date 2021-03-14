@@ -10,7 +10,7 @@ class Logger:
 
         self.logger = getLogger(name)
         self.logger.setLevel(level)
-        formatter = Formatter("[%(asctime)s] [%(process)d] [%(name)s] [%(levelname)s] %(message)s")
+        formatter = Formatter("[%(asctime)s] [%(name)s] [%(levelname)s] %(message)s")
 
         # stdout
         handler = StreamHandler()
