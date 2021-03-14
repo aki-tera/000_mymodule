@@ -1,11 +1,12 @@
 # pythonのloggingについてのメモ
 # https://qiita.com/studio_haneya/items/469f3cf534bf68541a77
 
-from logging import Formatter, handlers, StreamHandler, getLogger, DEBUG
+from logging import Formatter, handlers, StreamHandler, getLogger, NullHandler
+from logging import DEBUG, INFO, WARNING, ERROR, CRITICAL
 
 
 class Logger:
-    def __init__(self, name=__name__, filename='./fuga.log', level=DEBUG):
+    def __init__(self, name=__name__, filename="", level=DEBUG, valid=True):
         assert isinstance(filename, str), 'filename must be string: {}'.format(filename)
 
         self.logger = getLogger(name)
@@ -13,18 +14,22 @@ class Logger:
         formatter = Formatter("[%(asctime)s] [%(name)s] [%(levelname)s] %(message)s")
 
         # stdout
-        handler = StreamHandler()
+        if valid == True:
+            handler = StreamHandler()
+        else:
+            handler = NullHandler()
         handler.setLevel(level)
         handler.setFormatter(formatter)
         self.logger.addHandler(handler)
 
         # file
-        handler = handlers.RotatingFileHandler(filename=filename,
-                                               maxBytes=1048576,
-                                               backupCount=3)
-        handler.setLevel(level)
-        handler.setFormatter(formatter)
-        self.logger.addHandler(handler)
+        if filename != "":
+            handler = handlers.RotatingFileHandler(filename=filename,
+                                                   maxBytes=1048576,
+                                                   backupCount=3)
+            handler.setLevel(level)
+            handler.setFormatter(formatter)
+            self.logger.addHandler(handler)
 
     def debug(self, msg):
         self.logger.debug(msg)
