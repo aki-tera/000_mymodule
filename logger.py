@@ -14,7 +14,7 @@ class Logger:
         formatter = Formatter("[%(asctime)s] [%(name)s] [%(levelname)s] %(message)s")
 
         # stdout
-        if valid == True:
+        if valid is True:
             handler = StreamHandler()
         else:
             handler = NullHandler()
