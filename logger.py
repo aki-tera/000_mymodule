@@ -26,7 +26,8 @@ class Logger:
         if filename != "":
             handler = handlers.RotatingFileHandler(filename=filename,
                                                    maxBytes=1048576,
-                                                   backupCount=3)
+                                                   backupCount=3,
+                                                   encoding="utf-8")
             handler.setLevel(level)
             handler.setFormatter(formatter)
             self.logger.addHandler(handler)
